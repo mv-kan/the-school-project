@@ -10,3 +10,4 @@ So I "talked" to Paulina to help her out. And I have got general structure from 
 And about accounting and pupils. Pupils are in classes called like this "TiB1", "TiA2". The number is year of studying, "Ti" is name of faculty/specialization, "B" is the letter of class (A, B, C etc etc)
 Each pupil has email/phonenumber for contact, but it is optional. Pupils pays their rent each month also some pupils pay for food, provided by Awans (It is bad, do not buy it). And it is mandatory to pay for food for first year pupils (I cannot blame them for giving bad food to kids and making it mandatory to pay for this bad food, who am I to blame them?) 
 Not all pupils live in the dorms. Also not all residents of dorms are pupils.
+

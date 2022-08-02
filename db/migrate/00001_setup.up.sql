@@ -13,10 +13,12 @@ CREATE TABLE IF NOT EXISTS dormitories (
 CREATE TABLE IF NOT EXISTS room_types (
     id SERIAL PRIMARY KEY,
     price MONEY NOT NULL,
-    dormitory_id INT NOT NULL, 
+    dormitory_id INT NOT NULL,
     name VARCHAR(500) NOT NULL,
+    max_of_residents INT NOT NULL,
     FOREIGN KEY (dormitory_id) REFERENCES dormitories(id)
 );
+
 CREATE TABLE IF NOT EXISTS rooms (
     id SERIAL PRIMARY KEY,
     room_number VARCHAR(50) NOT NULL,
@@ -28,7 +30,7 @@ CREATE TABLE IF NOT EXISTS rooms (
 CREATE TABLE IF NOT EXISTS school_classes (
     id SERIAL PRIMARY KEY,
     name VARCHAR(500) NOT NULL, 
-    class_year SERIAL NOT NULL,
+    class_year INT NOT NULL,
     UNIQUE(name, class_year)
 );
 
@@ -70,17 +72,13 @@ CREATE TABLE IF NOT EXISTS invoices(
     pupil_id INT NOT NULL,
     type_of_service INT NOT NULL,
     amount_of_money MONEY NOT NULL,
+    paymentdue DATE NOT NULL,
     FOREIGN KEY (pupil_id) REFERENCES pupils(id),
     FOREIGN KEY (type_of_service) REFERENCES types_of_service(id)
 );
 
-CREATE TABLE IF NOT EXISTS paymentdue (
-    invoice_id SERIAL PRIMARY KEY REFERENCES invoices(id),
-    paymentdue DATE NOT NULL
-);
-
 CREATE TABLE IF NOT EXISTS invoice_notes (
-    invoice_id SERIAL PRIMARY KEY REFERENCES invoices(id),
+    invoice_id INT PRIMARY KEY REFERENCES invoices(id),
     note TEXT NOT NULL
 ); 
 
