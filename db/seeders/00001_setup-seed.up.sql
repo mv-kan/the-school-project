@@ -32,7 +32,7 @@ INSERT INTO types_of_service (id, name) VALUES
 (2, 'payment for superviser'), 
 (3, 'payment for education');
 
-INSERT INTO invoices(id, date_of_payment, pupil_id, type_of_service, amount_of_money, paymentdue) VALUES 
+INSERT INTO invoices(id, date_of_payment, pupil_id, type_of_service, amount_of_money, payment_due) VALUES 
 (1, '2022-08-02', 1, 1, 0, '2022-09-02'),
 (2, '2022-08-01', 2, 1, 380, '2022-09-02'),
 (4, '2022-08-02', 3, 2, 500, '2023-08-02'),
@@ -45,5 +45,5 @@ INSERT INTO invoice_notes(invoice_id, note) VALUES
 
 /*
 this is query to get everybody who owes Awans for lodging
-SELECT invoices.pupil_id FROM invoices WHERE type_of_service=1 AND not CURRENT_DATE<paymentdue AND invoices.pupil_id NOT IN (SELECT invoices.pupil_id FROM invoices WHERE CURRENT_DATE<paymentdue AND type_of_service=1);
+SELECT invoices.pupil_id FROM invoices WHERE type_of_service=1 AND not CURRENT_DATE<payment_due AND invoices.pupil_id NOT IN (SELECT invoices.pupil_id FROM invoices WHERE CURRENT_DATE<payment_due AND type_of_service=1);
 */
