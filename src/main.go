@@ -27,7 +27,7 @@ func main() {
 	}
 	pupil := entity.Pupil{}
 
-	db.Preload("Invoices").First(&pupil)
+	db.Preload("Invoices").First(&pupil, 2)
 	for i, invoice := range pupil.Invoices {
 		db.Model(&invoice).Preload("Note").Find(&invoice)
 		pupil.Invoices[i] = invoice
