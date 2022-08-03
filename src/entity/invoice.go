@@ -7,7 +7,7 @@ import (
 )
 
 type Invoice struct {
-	ID              uint            `gorm:"primaryKey"`
+	ID              int             `gorm:"primaryKey"`
 	DateOfPayment   time.Time       `gorm:"notNull"`
 	PupilID         int             `gorm:"notNull"`
 	TypeOfServiceID int             `gorm:"notNull"`

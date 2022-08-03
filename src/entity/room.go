@@ -1,7 +1,7 @@
 package entity
 
 type Room struct {
-	ID         uint    `gorm:"primaryKey"`
+	ID         int     `gorm:"primaryKey"`
 	RoomNumber string  `gorm:"notNull"`
 	RoomTypeID int     `gorm:"notNull"`
 	Pupils     []Pupil `gorm:"foreignKey:RoomID"`

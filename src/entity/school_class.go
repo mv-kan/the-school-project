@@ -1,7 +1,7 @@
 package entity
 
 type SchoolClass struct {
-	ID        uint    `gorm:"primaryKey"`
+	ID        int     `gorm:"primaryKey"`
 	Name      string  `gorm:"notNull"`
 	ClassYear int     `gorm:"notNull"`
 	Pupils    []Pupil `gorm:"foreignKey:SchoolClassID"`

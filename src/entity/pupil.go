@@ -3,7 +3,7 @@ package entity
 import "database/sql"
 
 type Pupil struct {
-	ID            uint   `gorm:"primaryKey"`
+	ID            int    `gorm:"primaryKey"`
 	Name          string `gorm:"notNull"`
 	Surname       string `gorm:"notNull"`
 	Email         sql.NullString

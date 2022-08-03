@@ -1,6 +1,6 @@
 package entity
 
 type TypeOfService struct {
-	ID   uint   `gorm:"primaryKey"`
+	ID   int    `gorm:"primaryKey"`
 	Name string `gorm:"notNull"`
 }

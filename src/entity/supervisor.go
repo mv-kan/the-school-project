@@ -1,7 +1,7 @@
 package entity
 
 type Supervisor struct {
-	ID          uint    `gorm:"primaryKey"`
+	ID          int     `gorm:"primaryKey"`
 	Name        string  `gorm:"notNull"`
 	Surname     string  `gorm:"notNull"`
 	Email       string  `gorm:"notNull"`
