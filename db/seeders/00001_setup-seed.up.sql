@@ -6,7 +6,7 @@ INSERT INTO room_types(id, price, dormitory_id, name, max_of_residents) VALUES
 (2, 380, 2, 'two person room', 2),
 (3, 305, 2, 'three person room', 3);
 
-INSERT INTO rooms(id, room_number, room_type) VALUES 
+INSERT INTO rooms(id, room_number, room_type_id) VALUES 
 (1, '415', 1),
 (2, '19B', 2),
 (3, '19A', 3);
@@ -32,7 +32,7 @@ INSERT INTO types_of_service (id, name) VALUES
 (2, 'payment for superviser'), 
 (3, 'payment for education');
 
-INSERT INTO invoices(id, date_of_payment, pupil_id, type_of_service, amount_of_money, payment_due) VALUES 
+INSERT INTO invoices(id, date_of_payment, pupil_id, type_of_service_id, amount_of_money, payment_due) VALUES 
 (1, '2022-08-02', 1, 1, 0, '2022-09-02'),
 (2, '2022-08-01', 2, 1, 380, '2022-09-02'),
 (4, '2022-08-02', 3, 2, 500, '2023-08-02'),

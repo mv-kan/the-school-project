@@ -22,9 +22,9 @@ CREATE TABLE IF NOT EXISTS room_types (
 CREATE TABLE IF NOT EXISTS rooms (
     id SERIAL PRIMARY KEY,
     room_number VARCHAR(50) NOT NULL,
-    room_type INT NOT NULL,
-    UNIQUE(room_number, room_type),
-    FOREIGN KEY (room_type) REFERENCES room_types(id)
+    room_type_id INT NOT NULL,
+    UNIQUE(room_number, room_type_id),
+    FOREIGN KEY (room_type_id) REFERENCES room_types(id)
 );
 
 CREATE TABLE IF NOT EXISTS school_classes (
@@ -70,11 +70,11 @@ CREATE TABLE IF NOT EXISTS invoices(
     id SERIAL PRIMARY KEY,
     date_of_payment DATE NOT NULL,
     pupil_id INT NOT NULL,
-    type_of_service INT NOT NULL,
+    type_of_service_id INT NOT NULL,
     amount_of_money MONEY NOT NULL,
     payment_due DATE NOT NULL,
     FOREIGN KEY (pupil_id) REFERENCES pupils(id),
-    FOREIGN KEY (type_of_service) REFERENCES types_of_service(id)
+    FOREIGN KEY (type_of_service_id) REFERENCES types_of_service(id)
 );
 
 CREATE TABLE IF NOT EXISTS invoice_notes (
