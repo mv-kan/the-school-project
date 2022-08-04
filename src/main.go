@@ -12,6 +12,7 @@ import (
 )
 
 func testServices(db *gorm.DB) {
+	// test services
 	invoiceRepo := repo.New[entity.Invoice](db)
 	pupilRepo := repo.New[entity.Pupil](db)
 	financialService := service.NewFinancial(invoiceRepo, pupilRepo)
@@ -28,6 +29,21 @@ func testServices(db *gorm.DB) {
 	fmt.Println("debtors:")
 	for _, pupil := range debtors {
 		fmt.Println(pupil)
+	}
+
+	// test enroll
+
+	enrollService := service.NewEnroll(db)
+	pupilToEnroll := entity.Pupil{
+		Name:          "john",
+		Surname:       "johnson",
+		SchoolClassID: 1,
+	}
+	err = enrollService.Enroll(pupilToEnroll)
+	if err != nil {
+		panic(err)
+	} else {
+		fmt.Println("Success?")
 	}
 }
 
@@ -77,5 +93,13 @@ func main() {
 	pupil.Invoices = pupilInvoices
 
 	fmt.Println(pupil)
+	_, err = pupilRepo.Save(entity.Pupil{
+		Name:          "soemthing",
+		Surname:       "back",
+		SchoolClassID: 1,
+	})
+	if err != nil {
+		panic(err)
+	}
 	testServices(db)
 }

@@ -9,6 +9,7 @@ import (
 type Invoice struct {
 	ID              int             `gorm:"primaryKey"`
 	DateOfPayment   time.Time       `gorm:"notNull"`
+	PaymentStart    time.Time       `gorm:"notNull"`
 	PaymentDue      time.Time       `gorm:"notNull"`
 	PupilID         int             `gorm:"notNull"`
 	TypeOfServiceID int             `gorm:"notNull"`

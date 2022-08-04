@@ -72,6 +72,7 @@ CREATE TABLE IF NOT EXISTS invoices(
     pupil_id INT NOT NULL,
     type_of_service_id INT NOT NULL,
     amount_of_money DECIMAL NOT NULL,
+    payment_start DATE NOT NULL,
     payment_due DATE NOT NULL,
     FOREIGN KEY (pupil_id) REFERENCES pupils(id),
     FOREIGN KEY (type_of_service_id) REFERENCES types_of_service(id)

@@ -8,8 +8,6 @@ import (
 	"github.com/shopspring/decimal"
 )
 
-const SERVICE_TYPE_LODGING = 1
-
 func NewFinancial(invoiceRepo repo.IRepository[entity.Invoice], pupilRepo repo.IRepository[entity.Pupil]) IFinancialService {
 	return &finacialService{invoiceRepo: invoiceRepo, pupilRepo: pupilRepo}
 }

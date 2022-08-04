@@ -32,13 +32,13 @@ INSERT INTO types_of_service (id, name) VALUES
 (2, 'payment for superviser'), 
 (3, 'payment for education');
 
-INSERT INTO invoices(id, date_of_payment, pupil_id, type_of_service_id, amount_of_money, payment_due) VALUES 
-(1, '2022-08-02', 1, 1, 0, '2022-09-02'),
-(2, '2022-08-01', 2, 1, 380, '2022-09-02'),
-(4, '2022-08-02', 3, 2, 500, '2023-08-02'),
-(5, '2022-08-02', 2, 1, 380, '2022-10-02'), 
-(6, '2022-04-02', 3, 1, 380, '2022-05-02'),
-(7, '2022-04-02', 2, 1, 380, '2022-05-02');
+INSERT INTO invoices(id, date_of_payment, pupil_id, type_of_service_id, amount_of_money, payment_start, payment_due) VALUES 
+(1, '2022-08-02', 1, 1, 0,'2022-08-02', '2022-09-02'),
+(2, '2022-08-01', 2, 1, 380,'2022-08-01', '2022-09-02'),
+(4, '2022-08-02', 3, 2, 500,'2022-08-02', '2023-08-02'),
+(5, '2022-08-02', 2, 1, 380,'2022-08-02', '2022-10-02'), 
+(6, '2022-04-02', 3, 1, 380,'2022-04-02', '2022-05-02'),
+(7, '2022-04-02', 2, 1, 380,'2022-04-02', '2022-05-02');
 
 INSERT INTO invoice_notes(invoice_id, note) VALUES 
 (1, 'Bogdana did not pay because she have got help from our school for good grades');
