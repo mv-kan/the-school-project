@@ -19,10 +19,15 @@ type IRepository[T any] interface {
 	Delete(id int) error
 	Save(T) (T, error)
 	Update(T) error
+	WithTx(tx *gorm.DB) IRepository[T]
 }
 
 type Repository[T any] struct {
 	db *gorm.DB
+}
+
+func (repo Repository[T]) WithTx(tx *gorm.DB) IRepository[T] {
+	return New[T](tx)
 }
 
 func (repo Repository[T]) FindAll() ([]T, error) {
