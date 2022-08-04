@@ -10,6 +10,10 @@ import (
 
 const SERVICE_TYPE_LODGING = 1
 
+func NewFinancial(invoiceRepo repo.IRepository[entity.Invoice], pupilRepo repo.IRepository[entity.Pupil]) IFinancialService {
+	return &finacialService{invoiceRepo: invoiceRepo, pupilRepo: pupilRepo}
+}
+
 type IFinancialService interface {
 	FindAllLodgingDebtors() ([]entity.Pupil, error)
 	CollectedMoneyForMonth(time.Time) (decimal.Decimal, error)
@@ -20,7 +24,7 @@ type finacialService struct {
 	pupilRepo   repo.IRepository[entity.Pupil]
 }
 
-func (s finacialService) FindAllDebtors() ([]entity.Pupil, error) {
+func (s finacialService) FindAllLodgingDebtors() ([]entity.Pupil, error) {
 	// find all not debtors
 	// get all invoices
 	invoices, err := s.invoiceRepo.FindAll()
@@ -30,7 +34,7 @@ func (s finacialService) FindAllDebtors() ([]entity.Pupil, error) {
 	// check for type of invoice and payment due date to get all fresh invoices
 	notDebtors := make([]int, 0)
 	for _, invoice := range invoices {
-		if time.Now().Before(invoice.PaymentDue) {
+		if time.Now().Before(invoice.PaymentDue) && invoice.TypeOfServiceID == SERVICE_TYPE_LODGING {
 			// extract pupil ids from invoices
 			notDebtors = append(notDebtors, invoice.PupilID)
 		}

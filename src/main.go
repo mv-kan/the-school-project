@@ -2,12 +2,34 @@ package main
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/mv-kan/the-school-project/entity"
 	"github.com/mv-kan/the-school-project/repo"
+	"github.com/mv-kan/the-school-project/service"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
+
+func testServices(db *gorm.DB) {
+	invoiceRepo := repo.New[entity.Invoice](db)
+	pupilRepo := repo.New[entity.Pupil](db)
+	financialService := service.NewFinancial(invoiceRepo, pupilRepo)
+	collectedMoney, err := financialService.CollectedMoneyForMonth(time.Now())
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("collected money for month", collectedMoney)
+
+	debtors, err := financialService.FindAllLodgingDebtors()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("debtors:")
+	for _, pupil := range debtors {
+		fmt.Println(pupil)
+	}
+}
 
 func main() {
 	const (
@@ -55,4 +77,5 @@ func main() {
 	pupil.Invoices = pupilInvoices
 
 	fmt.Println(pupil)
+	testServices(db)
 }
