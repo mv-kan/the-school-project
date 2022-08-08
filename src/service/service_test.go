@@ -20,6 +20,8 @@ import (
 
 // it is very important to keep this test values in sync with seeded values in "testing-db" folder
 var testDorm = entity.Dormitory{ID: 1, Name: "Laura"}
+var testDormToCreate = entity.Dormitory{Name: "Bartek"}
+var testDorms = []entity.Dormitory{testDorm, {ID: 2, Name: "Laura"}}
 
 func connectToDB() *gorm.DB {
 	var (
@@ -96,4 +98,54 @@ func TestService_Find(t *testing.T) {
 
 	require.Nil(t, err)
 	assert.Equal(t, testDorm, dorm)
+}
+
+// test for service find all
+func TestService_FindAll(t *testing.T) {
+	db := connectToDB()
+
+	dormRepo := repo.New[entity.Dormitory](db)
+	dormServ := New(dormRepo)
+	dorms, err := dormServ.FindAll()
+
+	require.Nil(t, err)
+	assert.Equal(t, 2, len(dorms))
+}
+
+func TestService_SaveUpdateDelete(t *testing.T) {
+	db := connectToDB()
+	var (
+		dorm entity.Dormitory
+		err  error
+	)
+
+	t.Run("Save", func(t *testing.T) {
+		dormRepo := repo.New[entity.Dormitory](db)
+		dormServ := New(dormRepo)
+		dorm, err = dormServ.Save(testDormToCreate)
+		require.Nil(t, err)
+		assert.Equal(t, testDormToCreate.Name, dorm.Name)
+	})
+	t.Run("Update", func(t *testing.T) {
+		updatedName := "BartekUpdated"
+		dormRepo := repo.New[entity.Dormitory](db)
+		dormServ := New(dormRepo)
+		dorm.Name = updatedName
+		err := dormServ.Update(dorm)
+		require.Nil(t, err)
+
+		dorm, err = dormServ.Find(dorm.ID)
+		require.Nil(t, err)
+
+		dorm, err := dormServ.Find(dorm.ID)
+		assert.Equal(t, updatedName, dorm.Name)
+	})
+	t.Run("Delete", func(t *testing.T) {
+		dormRepo := repo.New[entity.Dormitory](db)
+		dormServ := New(dormRepo)
+		err := dormServ.Delete(dorm.ID)
+		require.Nil(t, err)
+		_, err = dormServ.Find(dorm.ID)
+		assert.NotNil(t, err)
+	})
 }

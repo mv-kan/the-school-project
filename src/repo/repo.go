@@ -1,7 +1,6 @@
 package repo
 
 import (
-	"database/sql"
 	"errors"
 
 	"gorm.io/gorm"
@@ -38,8 +37,8 @@ func (repo Repository[T]) FindAll() ([]T, error) {
 
 func (repo Repository[T]) Find(id int) (T, error) {
 	var entity T
-	err := repo.db.Find(&entity, id).Error
-	if errors.Is(err, sql.ErrNoRows) {
+	err := repo.db.Take(&entity, id).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return entity, ErrRecordNotFound
 	} else if err != nil {
 		return entity, err
@@ -50,7 +49,7 @@ func (repo Repository[T]) Find(id int) (T, error) {
 func (repo Repository[T]) Delete(id int) error {
 	var entity T
 	err := repo.db.Delete(&entity, id).Error
-	if errors.Is(err, sql.ErrNoRows) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return ErrRecordNotFound
 	}
 	return err
@@ -62,6 +61,6 @@ func (repo Repository[T]) Save(entity T) (T, error) {
 }
 
 func (repo Repository[T]) Update(entity T) error {
-	err := repo.db.Save(&entity).Error
+	err := repo.db.Model(&entity).Updates(entity).Error
 	return err
 }
