@@ -14,7 +14,7 @@ func NewFinancial(invoiceRepo repo.IRepository[entity.Invoice], pupilRepo repo.I
 
 type IFinancialService interface {
 	FindAllLodgingDebtors() ([]entity.Pupil, error)
-	CollectedMoneyForMonth(time.Time) (decimal.Decimal, error)
+	CollectedMoneyForMonth(year, month int) (decimal.Decimal, error)
 }
 
 type finacialService struct {
@@ -61,7 +61,7 @@ func (s finacialService) FindAllLodgingDebtors() ([]entity.Pupil, error) {
 	return debtors, nil
 }
 
-func (s finacialService) CollectedMoneyForMonth(thisMonth time.Time) (decimal.Decimal, error) {
+func (s finacialService) CollectedMoneyForMonth(year, month int) (decimal.Decimal, error) {
 	// get all invoices
 	invoices, err := s.invoiceRepo.FindAll()
 	if err != nil {
@@ -70,7 +70,7 @@ func (s finacialService) CollectedMoneyForMonth(thisMonth time.Time) (decimal.De
 	// compare date and add up amount of money
 	sum := decimal.Decimal{}
 	for _, invoice := range invoices {
-		if invoice.DateOfPayment.Month() == thisMonth.Month() && invoice.DateOfPayment.Year() == thisMonth.Year() {
+		if invoice.DateOfPayment.Month() == time.Month(month) && invoice.DateOfPayment.Year() == year {
 			sum = decimal.Sum(invoice.AmountOfMoney, sum)
 		}
 	}
