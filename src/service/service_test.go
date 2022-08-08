@@ -10,6 +10,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/mv-kan/the-school-project/entity"
 	"github.com/mv-kan/the-school-project/repo"
+	"github.com/shopspring/decimal"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/testcontainers/testcontainers-go"
@@ -22,6 +23,17 @@ import (
 var testDorm = entity.Dormitory{ID: 1, Name: "Laura"}
 var testDormToCreate = entity.Dormitory{Name: "Bartek"}
 var testDorms = []entity.Dormitory{testDorm, {ID: 2, Name: "Laura"}}
+var testDebptorID int = 3
+var testCollectedMoney = decimal.NewFromFloat(760)
+var testPupil = entity.Pupil{
+	Name:          "new pupil name",
+	Surname:       "new pupil surname",
+	SchoolClassID: 1,
+}
+var testRoomID = 2
+var testAvailableSpace = 1
+var testResidentID = 2
+var testRoomTypeID = 2
 
 func connectToDB() *gorm.DB {
 	var (

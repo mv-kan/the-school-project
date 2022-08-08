@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS dormitories (
 
 CREATE TABLE IF NOT EXISTS room_types (
     id SERIAL PRIMARY KEY,
-    price MONEY NOT NULL,
+    price DECIMAL NOT NULL,
     dormitory_id INT NOT NULL,
     name VARCHAR(500) NOT NULL,
     max_of_residents INT NOT NULL,

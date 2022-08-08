@@ -6,10 +6,13 @@ import (
 	"github.com/mv-kan/the-school-project/entity"
 	"github.com/mv-kan/the-school-project/repo"
 	"github.com/shopspring/decimal"
+	"gorm.io/gorm"
 )
 
-func NewFinancial(invoiceRepo repo.IRepository[entity.Invoice], pupilRepo repo.IRepository[entity.Pupil]) IFinancialService {
-	return &finacialService{invoiceRepo: invoiceRepo, pupilRepo: pupilRepo}
+func NewFinancial(db *gorm.DB) IFinancialService {
+	invoiceRepo := repo.New[entity.Invoice](db)
+	pupilRepo := repo.New[entity.Pupil](db)
+	return &finacialService{pupilRepo: pupilRepo, invoiceRepo: invoiceRepo}
 }
 
 type IFinancialService interface {

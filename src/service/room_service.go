@@ -3,7 +3,15 @@ package service
 import (
 	"github.com/mv-kan/the-school-project/entity"
 	"github.com/mv-kan/the-school-project/repo"
+	"gorm.io/gorm"
 )
+
+func NewRoom(db *gorm.DB) IRoomService {
+	pupilRepo := repo.New[entity.Pupil](db)
+	roomRepo := repo.New[entity.Room](db)
+	roomTypeRepo := repo.New[entity.RoomType](db)
+	return roomService{service: service[entity.Room]{r: roomRepo}, pupilRepo: pupilRepo, roomTypeRepo: roomTypeRepo}
+}
 
 type IRoomService interface {
 	IService[entity.Room]

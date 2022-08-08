@@ -18,7 +18,7 @@ func NewEnroll(db *gorm.DB) IEnrollService {
 
 type IEnrollService interface {
 	// creates pupil and first invoice for education
-	Enroll(pupil entity.Pupil) error
+	Enroll(pupil entity.Pupil) (entity.Pupil, error)
 }
 
 type enrollService struct {
@@ -27,13 +27,13 @@ type enrollService struct {
 	invoiceRepo repo.IRepository[entity.Invoice]
 }
 
-func (s enrollService) Enroll(pupil entity.Pupil) error {
+func (s enrollService) Enroll(pupil entity.Pupil) (entity.Pupil, error) {
 
 	tx := s.db.Begin()
 	pupil, err := s.pupilRepo.WithTx(tx).Save(pupil)
 	if err != nil {
 		tx.Rollback()
-		return err
+		return pupil, err
 	}
 	// get school end date for payment due
 	today := time.Now()
@@ -48,23 +48,23 @@ func (s enrollService) Enroll(pupil entity.Pupil) error {
 		start_date, err = toDate(today.Year()+1, START_OF_SCHOOL_YEAR_MONTH, START_OF_SCHOOL_YEAR_DAY)
 		if err != nil {
 			tx.Rollback()
-			return err
+			return pupil, err
 		}
 		end_date, err = toDate(today.Year()+2, END_OF_SCHOOL_YEAR_MONTH, END_OF_SCHOOL_YEAR_DAY)
 		if err != nil {
 			tx.Rollback()
-			return err
+			return pupil, err
 		}
 	} else if today.Month() < START_OF_SCHOOL_YEAR_MONTH {
 		start_date, err = toDate(today.Year(), START_OF_SCHOOL_YEAR_MONTH, START_OF_SCHOOL_YEAR_DAY)
 		if err != nil {
 			tx.Rollback()
-			return err
+			return pupil, err
 		}
 		end_date, err = toDate(today.Year()+1, END_OF_SCHOOL_YEAR_MONTH, END_OF_SCHOOL_YEAR_DAY)
 		if err != nil {
 			tx.Rollback()
-			return err
+			return pupil, err
 		}
 	}
 
@@ -80,9 +80,9 @@ func (s enrollService) Enroll(pupil entity.Pupil) error {
 	_, err = s.invoiceRepo.WithTx(tx).Save(invoice)
 	if err != nil {
 		tx.Rollback()
-		return err
+		return pupil, err
 	}
 	// save it and commit to database
 	tx.Commit()
-	return nil
+	return pupil, nil
 }
