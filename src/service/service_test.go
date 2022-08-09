@@ -134,7 +134,7 @@ func TestService_SaveUpdateDelete(t *testing.T) {
 	t.Run("Save", func(t *testing.T) {
 		dormRepo := repo.New[entity.Dormitory](db)
 		dormServ := New(dormRepo)
-		dorm, err = dormServ.Save(testDormToCreate)
+		dorm, err = dormServ.Create(testDormToCreate)
 		require.Nil(t, err)
 		assert.Equal(t, testDormToCreate.Name, dorm.Name)
 	})

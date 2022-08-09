@@ -30,7 +30,7 @@ type enrollService struct {
 func (s enrollService) Enroll(pupil entity.Pupil) (entity.Pupil, error) {
 
 	tx := s.db.Begin()
-	pupil, err := s.pupilRepo.WithTx(tx).Save(pupil)
+	pupil, err := s.pupilRepo.WithTx(tx).Create(pupil)
 	if err != nil {
 		tx.Rollback()
 		return pupil, err
@@ -77,7 +77,7 @@ func (s enrollService) Enroll(pupil entity.Pupil) (entity.Pupil, error) {
 		TypeOfServiceID: SERVICE_TYPE_EDUCATION,
 		AmountOfMoney:   decimal.NewFromInt(CHARGE_FOR_EDUCATION),
 	}
-	_, err = s.invoiceRepo.WithTx(tx).Save(invoice)
+	_, err = s.invoiceRepo.WithTx(tx).Create(invoice)
 	if err != nil {
 		tx.Rollback()
 		return pupil, err

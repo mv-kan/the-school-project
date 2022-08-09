@@ -16,7 +16,7 @@ type IRepository[T any] interface {
 	FindAll() ([]T, error)
 	Find(id int) (T, error)
 	Delete(id int) error
-	Save(T) (T, error)
+	Create(T) (T, error)
 	Update(T) error
 	WithTx(tx *gorm.DB) IRepository[T]
 }
@@ -55,7 +55,7 @@ func (repo Repository[T]) Delete(id int) error {
 	return err
 }
 
-func (repo Repository[T]) Save(entity T) (T, error) {
+func (repo Repository[T]) Create(entity T) (T, error) {
 	err := repo.db.Create(&entity).Error
 	return entity, err
 }
