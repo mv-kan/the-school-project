@@ -2,10 +2,12 @@ package service
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"os"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/joho/godotenv"
 	"github.com/mv-kan/the-school-project/entity"
@@ -20,9 +22,17 @@ import (
 )
 
 // it is very important to keep this test values in sync with seeded values in "testing-db" folder
-var testDorm = entity.Dormitory{ID: 1, Name: "Laura"}
+var testPupilInDB = entity.Pupil{
+	ID:            1,
+	Name:          "michael",
+	Surname:       "lan",
+	SchoolClassID: 3,
+	RoomID:        sql.NullInt32{Int32: 2, Valid: true},
+}
+
+var testDormInDB = entity.Dormitory{ID: 1, Name: "Laura"}
 var testDormToCreate = entity.Dormitory{Name: "Bartek"}
-var testDorms = []entity.Dormitory{testDorm, {ID: 2, Name: "Laura"}}
+var testDorms = []entity.Dormitory{testDormInDB, {ID: 2, Name: "Laura"}}
 var testDebptorID int = 3
 var testCollectedMoney = decimal.NewFromFloat(760)
 var testPupil = entity.Pupil{
@@ -34,6 +44,19 @@ var testRoomID = 2
 var testAvailableSpace = 1
 var testResidentID = 2
 var testRoomTypeID = 2
+var testTypeOfServiceID = 1
+var testInvoiceID = 2
+var testInvoiceAmountOfMoney = decimal.NewFromFloat(380)
+var testInvoiceInDB = entity.Invoice{
+	ID:              1,
+	AmountOfMoney:   decimal.NewFromFloat(0),
+	PupilID:         1,
+	TypeOfServiceID: 1,
+	DateOfPayment:   time.Date(2022, time.August, 2, 0, 0, 0, 0, time.UTC),
+	PaymentStart:    time.Date(2022, time.August, 2, 0, 0, 0, 0, time.UTC),
+	PaymentDue:      time.Date(2022, time.September, 2, 0, 0, 0, 0, time.UTC),
+	Note:            &entity.InvoiceNote{ID: 1, Note: "Bogdana did not pay because she have got help from our school for good grades"},
+}
 
 func connectToDB() *gorm.DB {
 	var (
@@ -106,10 +129,10 @@ func TestService_Find(t *testing.T) {
 
 	dormRepo := repo.New[entity.Dormitory](db)
 	dormServ := New(dormRepo)
-	dorm, err := dormServ.Find(testDorm.ID)
+	dorm, err := dormServ.Find(testDormInDB.ID)
 
 	require.Nil(t, err)
-	assert.Equal(t, testDorm, dorm)
+	assert.Equal(t, testDormInDB, dorm)
 }
 
 // test for service find all
@@ -124,7 +147,7 @@ func TestService_FindAll(t *testing.T) {
 	assert.Equal(t, 2, len(dorms))
 }
 
-func TestService_SaveUpdateDelete(t *testing.T) {
+func TestService_CreateUpdateDelete(t *testing.T) {
 	db := connectToDB()
 	var (
 		dorm entity.Dormitory

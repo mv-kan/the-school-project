@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS invoices(
 );
 
 CREATE TABLE IF NOT EXISTS invoice_notes (
-    invoice_id INT PRIMARY KEY REFERENCES invoices(id),
+    id INT PRIMARY KEY REFERENCES invoices(id),
     note TEXT NOT NULL
 ); 
 
@@ -131,5 +131,5 @@ INSERT INTO invoices(id, date_of_payment, pupil_id, type_of_service_id, amount_o
 (DEFAULT, '2022-04-02', 3, 1, 380,'2022-04-02', '2022-05-02'),
 (DEFAULT, '2022-04-02', 2, 1, 380,'2022-04-02', '2022-05-02');
 
-INSERT INTO invoice_notes(invoice_id, note) VALUES 
+INSERT INTO invoice_notes(id, note) VALUES 
 (1, 'Bogdana did not pay because she have got help from our school for good grades');

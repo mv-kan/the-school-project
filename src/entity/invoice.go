@@ -14,5 +14,5 @@ type Invoice struct {
 	PupilID         int             `gorm:"notNull"`
 	TypeOfServiceID int             `gorm:"notNull"`
 	AmountOfMoney   decimal.Decimal `gorm:"type:numeric"`
-	Note            InvoiceNote     `gorm:"foreignKey:InvoiceID;references:id"`
+	Note            *InvoiceNote    `gorm:"foreignKey:ID;references:id"`
 }

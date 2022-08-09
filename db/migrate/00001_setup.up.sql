@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS invoices(
 );
 
 CREATE TABLE IF NOT EXISTS invoice_notes (
-    invoice_id INT PRIMARY KEY REFERENCES invoices(id),
+    id INT PRIMARY KEY REFERENCES invoices(id),
     note TEXT NOT NULL
 ); 
 

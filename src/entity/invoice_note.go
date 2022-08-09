@@ -1,6 +1,7 @@
 package entity
 
 type InvoiceNote struct {
-	InvoiceID int `gorm:"primaryKey"`
-	Note      string
+	// ID is the foreign key to the Invoice ID column.
+	ID   int `gorm:"primaryKey"`
+	Note string
 }
