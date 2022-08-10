@@ -6,15 +6,14 @@ import (
 	"gorm.io/gorm"
 )
 
-func NewRoom(db *gorm.DB) IRoomService {
+func NewRoomStat(db *gorm.DB) IRoomStatService {
 	pupilRepo := repo.New[entity.Pupil](db)
 	roomRepo := repo.New[entity.Room](db)
 	roomTypeRepo := repo.New[entity.RoomType](db)
-	return roomService{service: service[entity.Room]{r: roomRepo}, pupilRepo: pupilRepo, roomTypeRepo: roomTypeRepo}
+	return roomStatService{roomRepo: roomRepo, pupilRepo: pupilRepo, roomTypeRepo: roomTypeRepo}
 }
 
-type IRoomService interface {
-	IService[entity.Room]
+type IRoomStatService interface {
 	FindRoomType(room_id int) (entity.RoomType, error)
 	// check available space in room
 	FindAvailableSpace(room_id int) (int, error)
@@ -22,15 +21,15 @@ type IRoomService interface {
 	FindAllResidents(room_id int) ([]entity.Pupil, error)
 }
 
-type roomService struct {
-	service[entity.Room]
+type roomStatService struct {
+	roomRepo     repo.IRepository[entity.Room]
 	roomTypeRepo repo.IRepository[entity.RoomType]
 	pupilRepo    repo.IRepository[entity.Pupil]
 }
 
-func (s roomService) FindAvailableSpace(room_id int) (int, error) {
+func (s roomStatService) FindAvailableSpace(room_id int) (int, error) {
 	// check for existing
-	_, err := s.r.Find(room_id)
+	_, err := s.roomRepo.Find(room_id)
 	if err != nil {
 		return -1, err
 	}
@@ -45,9 +44,9 @@ func (s roomService) FindAvailableSpace(room_id int) (int, error) {
 	return roomType.MaxOfResidents - len(residents), nil
 }
 
-func (s roomService) FindAllResidents(room_id int) ([]entity.Pupil, error) {
+func (s roomStatService) FindAllResidents(room_id int) ([]entity.Pupil, error) {
 	// check for exising
-	_, err := s.r.Find(room_id)
+	_, err := s.roomRepo.Find(room_id)
 	if err != nil {
 		return nil, err
 	}
@@ -64,8 +63,8 @@ func (s roomService) FindAllResidents(room_id int) ([]entity.Pupil, error) {
 	return residents, nil
 }
 
-func (s roomService) FindRoomType(room_id int) (entity.RoomType, error) {
-	room, err := s.r.Find(room_id)
+func (s roomStatService) FindRoomType(room_id int) (entity.RoomType, error) {
+	room, err := s.roomRepo.Find(room_id)
 	if err != nil {
 		return entity.RoomType{}, err
 	}

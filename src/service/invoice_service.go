@@ -8,7 +8,8 @@ import (
 	"gorm.io/gorm"
 )
 
-func NewInvoice(db *gorm.DB) IInvoiceService {
+// use this contructor because this one uses upgraded version of service struct specifically for invoice case
+func NewInvoice(db *gorm.DB) IService[entity.Invoice] {
 	invoiceRepo := repo.New[entity.Invoice](db)
 	invoiceNoteRepo := repo.New[entity.InvoiceNote](db)
 	invoiceService := invoiceService{db: db, invoiceRepo: invoiceRepo, invoiceNoteRepo: invoiceNoteRepo}
@@ -17,14 +18,6 @@ func NewInvoice(db *gorm.DB) IInvoiceService {
 
 // the main difference between service[Invoice] and invoiceService is
 // that invoiceService gets invoices with notes and service[Invoice] doesn't
-type IInvoiceService interface {
-	FindAll() ([]entity.Invoice, error)
-	Find(id int) (entity.Invoice, error)
-	Delete(id int) error
-	Create(entity.Invoice) (entity.Invoice, error)
-	Update(entity.Invoice) error
-}
-
 type invoiceService struct {
 	db              *gorm.DB
 	invoiceNoteRepo repo.IRepository[entity.InvoiceNote]

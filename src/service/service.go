@@ -1,6 +1,8 @@
 package service
 
-import "github.com/mv-kan/the-school-project/repo"
+import (
+	"github.com/mv-kan/the-school-project/repo"
+)
 
 const (
 	SERVICE_TYPE_LODGING       = 1
@@ -11,6 +13,16 @@ const (
 	START_OF_SCHOOL_YEAR_MONTH = 9
 	CHARGE_FOR_EDUCATION       = 500
 )
+
+// func New[T any](db *gorm.DB) IService[T] {
+// 	var instance T
+// 	switch instance.(type) {
+// 	case entity.Invoice:
+// 		return NewInvoice()
+// 	default:
+// 		return &service[T]{r: r}
+// 	}
+// }
 
 func New[T any](r repo.IRepository[T]) IService[T] {
 	return &service[T]{r: r}

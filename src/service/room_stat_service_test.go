@@ -8,25 +8,25 @@ import (
 )
 
 // test room service function FindAvailableSpace
-func TestRoomService_FindAvailableSpace(t *testing.T) {
+func TestRoomStatService_FindAvailableSpace(t *testing.T) {
 	db := connectToDB()
-	roomService := NewRoom(db)
+	roomService := NewRoomStat(db)
 	availableSpace, err := roomService.FindAvailableSpace(testRoomID)
 	require.Nil(t, err)
 	assert.Equal(t, testAvailableSpace, availableSpace)
 }
 
-func TestRoomService_FindAllResidents(t *testing.T) {
+func TestRoomStatService_FindAllResidents(t *testing.T) {
 	db := connectToDB()
-	roomService := NewRoom(db)
+	roomService := NewRoomStat(db)
 	residents, err := roomService.FindAllResidents(testRoomID)
 	require.Nil(t, err)
 	assert.Equal(t, testResidentID, residents[0].ID)
 }
 
-func TestRoomService_FindRoomType(t *testing.T) {
+func TestRoomStatService_FindRoomType(t *testing.T) {
 	db := connectToDB()
-	roomService := NewRoom(db)
+	roomService := NewRoomStat(db)
 	roomType, err := roomService.FindRoomType(testRoomID)
 	require.Nil(t, err)
 	assert.Equal(t, testRoomTypeID, roomType.ID)
