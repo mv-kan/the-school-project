@@ -7,7 +7,7 @@ import (
 )
 
 func New[T any](serv service.IService[T]) IController {
-	return &Controller[T]{service: serv}
+	return &controller[T]{service: serv}
 }
 
 type IController interface {
@@ -18,26 +18,26 @@ type IController interface {
 	Update(w http.ResponseWriter, r *http.Request)
 }
 
-type Controller[T any] struct {
+type controller[T any] struct {
 	service service.IService[T]
 }
 
-func (c *Controller[T]) Get(w http.ResponseWriter, r *http.Request) {
+func (c *controller[T]) Get(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (c *Controller[T]) GetAll(w http.ResponseWriter, r *http.Request) {
+func (c *controller[T]) GetAll(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (c *Controller[T]) Delete(w http.ResponseWriter, r *http.Request) {
+func (c *controller[T]) Delete(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (c *Controller[T]) Create(w http.ResponseWriter, r *http.Request) {
+func (c *controller[T]) Create(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (c *Controller[T]) Update(w http.ResponseWriter, r *http.Request) {
+func (c *controller[T]) Update(w http.ResponseWriter, r *http.Request) {
 
 }
