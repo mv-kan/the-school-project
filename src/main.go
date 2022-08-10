@@ -7,6 +7,7 @@ import (
 )
 
 func main() {
+
 	muxRouter := router.New()
 	http.Handle("/", muxRouter)
 	http.ListenAndServe(":8080", nil)

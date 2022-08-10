@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/mv-kan/the-school-project/entity"
+	testingdb "github.com/mv-kan/the-school-project/testing-db"
 	"github.com/shopspring/decimal"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -16,9 +17,9 @@ func TestInvoiceService_Create(t *testing.T) {
 
 	invoiceService := NewInvoice(db)
 	invoice = entity.Invoice{
-		PupilID:         testPupilInDB.ID,
+		PupilID:         testingdb.TestPupilInDB.ID,
 		AmountOfMoney:   amount,
-		TypeOfServiceID: testTypeOfServiceID,
+		TypeOfServiceID: testingdb.TestTypeOfServiceID,
 	}
 	invoice, err := invoiceService.Create(invoice)
 	require.Nil(t, err)
@@ -32,9 +33,9 @@ func TestInvoiceService_Update(t *testing.T) {
 
 	// create
 	invoice := entity.Invoice{
-		PupilID:         testPupilInDB.ID,
+		PupilID:         testingdb.TestPupilInDB.ID,
 		AmountOfMoney:   amount,
-		TypeOfServiceID: testTypeOfServiceID,
+		TypeOfServiceID: testingdb.TestTypeOfServiceID,
 	}
 	invoice, err := invoiceService.Create(invoice)
 	require.Nil(t, err)
@@ -53,9 +54,9 @@ func TestInvoiceService_Update(t *testing.T) {
 func TestInvoiceService_Delete(t *testing.T) {
 	var amount = decimal.NewFromFloat(100)
 	var invoice = entity.Invoice{
-		PupilID:         testPupilInDB.ID,
+		PupilID:         testingdb.TestPupilInDB.ID,
 		AmountOfMoney:   amount,
-		TypeOfServiceID: testTypeOfServiceID,
+		TypeOfServiceID: testingdb.TestTypeOfServiceID,
 	}
 	db := connectToDB()
 
@@ -76,10 +77,10 @@ func TestInvoiceService_Find(t *testing.T) {
 	// test find by id function
 	db := connectToDB()
 	invoiceService := NewInvoice(db)
-	invoice, err := invoiceService.Find(testInvoiceInDB.ID)
+	invoice, err := invoiceService.Find(testingdb.TestInvoiceInDB.ID)
 	require.Nil(t, err)
-	assert.Equal(t, testInvoiceInDB.AmountOfMoney.String(), invoice.AmountOfMoney.String())
-	assert.Equal(t, testInvoiceInDB.Note.Note, invoice.Note.Note)
+	assert.Equal(t, testingdb.TestInvoiceInDB.AmountOfMoney.String(), invoice.AmountOfMoney.String())
+	assert.Equal(t, testingdb.TestInvoiceInDB.Note.Note, invoice.Note.Note)
 }
 
 func TestInvoiceService_FindAll(t *testing.T) {

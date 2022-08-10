@@ -2,17 +2,15 @@ package service
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 	"os"
 	"strings"
 	"testing"
-	"time"
 
 	"github.com/joho/godotenv"
 	"github.com/mv-kan/the-school-project/entity"
 	"github.com/mv-kan/the-school-project/repo"
-	"github.com/shopspring/decimal"
+	testingdb "github.com/mv-kan/the-school-project/testing-db"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/testcontainers/testcontainers-go"
@@ -21,50 +19,13 @@ import (
 	"gorm.io/gorm"
 )
 
-// it is very important to keep this test values in sync with seeded values in "testing-db" folder
-var testPupilInDB = entity.Pupil{
-	ID:            1,
-	Name:          "michael",
-	Surname:       "lan",
-	SchoolClassID: 3,
-	RoomID:        sql.NullInt32{Int32: 2, Valid: true},
-}
-
-var testDormInDB = entity.Dormitory{ID: 1, Name: "Laura"}
-var testDormToCreate = entity.Dormitory{Name: "Bartek"}
-var testDorms = []entity.Dormitory{testDormInDB, {ID: 2, Name: "Laura"}}
-var testDebptorID int = 3
-var testCollectedMoney = decimal.NewFromFloat(760)
-var testPupil = entity.Pupil{
-	Name:          "new pupil name",
-	Surname:       "new pupil surname",
-	SchoolClassID: 1,
-}
-var testRoomID = 2
-var testAvailableSpace = 1
-var testResidentID = 2
-var testRoomTypeID = 2
-var testTypeOfServiceID = 1
-var testInvoiceID = 2
-var testInvoiceAmountOfMoney = decimal.NewFromFloat(380)
-var testInvoiceInDB = entity.Invoice{
-	ID:              1,
-	AmountOfMoney:   decimal.NewFromFloat(0),
-	PupilID:         1,
-	TypeOfServiceID: 1,
-	DateOfPayment:   time.Date(2022, time.August, 2, 0, 0, 0, 0, time.UTC),
-	PaymentStart:    time.Date(2022, time.August, 2, 0, 0, 0, 0, time.UTC),
-	PaymentDue:      time.Date(2022, time.September, 2, 0, 0, 0, 0, time.UTC),
-	Note:            &entity.InvoiceNote{ID: 1, Note: "Bogdana did not pay because she have got help from our school for good grades"},
-}
-
 func connectToDB() *gorm.DB {
 	var (
-		DB_USER     = os.Getenv("DBUSER")
-		DB_PASSWORD = os.Getenv("DBPASSWORD")
-		DB_HOST     = os.Getenv("DBHOST")
-		DB_PORT     = os.Getenv("DBPORT")
-		DB_NAME     = os.Getenv("DBNAME")
+		DB_USER     = os.Getenv("TEST_DB_USER")
+		DB_PASSWORD = os.Getenv("TEST_DB_PASSWORD")
+		DB_HOST     = os.Getenv("TEST_DB_HOST")
+		DB_PORT     = os.Getenv("TEST_DB_PORT")
+		DB_NAME     = os.Getenv("TEST_DB_NAME")
 	)
 	dsn := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME)
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
@@ -77,9 +38,9 @@ func connectToDB() *gorm.DB {
 func TestMain(m *testing.M) {
 	godotenv.Load("../.env")
 	var (
-		DB_USER     = os.Getenv("DBUSER")
-		DB_PASSWORD = os.Getenv("DBPASSWORD")
-		DB_NAME     = os.Getenv("DBNAME")
+		DB_USER     = os.Getenv("TEST_DB_USER")
+		DB_PASSWORD = os.Getenv("TEST_DB_PASSWORD")
+		DB_NAME     = os.Getenv("TEST_DB_NAME")
 	)
 	// Work out the path to the 'scripts' directory and set mount strings
 	packageName := "service"
@@ -118,7 +79,7 @@ func TestMain(m *testing.M) {
 
 	// Get the port mapped to 5432 and set as ENV
 	p, _ := postgresC.MappedPort(ctx, "5432")
-	os.Setenv("DBPORT", p.Port())
+	os.Setenv("TEST_DB_PORT", p.Port())
 
 	exitVal := m.Run()
 	os.Exit(exitVal)
@@ -129,10 +90,10 @@ func TestService_Find(t *testing.T) {
 
 	dormRepo := repo.New[entity.Dormitory](db)
 	dormServ := New(dormRepo)
-	dorm, err := dormServ.Find(testDormInDB.ID)
+	dorm, err := dormServ.Find(testingdb.TestDormInDB.ID)
 
 	require.Nil(t, err)
-	assert.Equal(t, testDormInDB, dorm)
+	assert.Equal(t, testingdb.TestDormInDB, dorm)
 }
 
 // test for service find all
@@ -157,9 +118,9 @@ func TestService_CreateUpdateDelete(t *testing.T) {
 	t.Run("Save", func(t *testing.T) {
 		dormRepo := repo.New[entity.Dormitory](db)
 		dormServ := New(dormRepo)
-		dorm, err = dormServ.Create(testDormToCreate)
+		dorm, err = dormServ.Create(testingdb.TestDormToCreate)
 		require.Nil(t, err)
-		assert.Equal(t, testDormToCreate.Name, dorm.Name)
+		assert.Equal(t, testingdb.TestDormToCreate.Name, dorm.Name)
 	})
 	t.Run("Update", func(t *testing.T) {
 		updatedName := "BartekUpdated"
