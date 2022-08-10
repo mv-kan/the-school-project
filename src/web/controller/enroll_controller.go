@@ -5,6 +5,7 @@ import (
 
 	"github.com/mv-kan/the-school-project/logger"
 	"github.com/mv-kan/the-school-project/service"
+	"github.com/mv-kan/the-school-project/web/utils"
 )
 
 func NewEnroll(log logger.Logger, enrollServ service.IEnrollService) IEnrollController {
@@ -21,5 +22,6 @@ type enrollController struct {
 }
 
 func (c *enrollController) Enroll(w http.ResponseWriter, r *http.Request) {
+	utils.RespondWithErrorLog(c.log, w, http.StatusNotImplemented, utils.NotImplemtedMessage)
 
 }

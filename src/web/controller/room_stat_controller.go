@@ -5,6 +5,7 @@ import (
 
 	"github.com/mv-kan/the-school-project/logger"
 	"github.com/mv-kan/the-school-project/service"
+	"github.com/mv-kan/the-school-project/web/utils"
 )
 
 func NewRoomStat(log logger.Logger, roomStatServ service.IRoomStatService) IRoomStatController {
@@ -23,14 +24,14 @@ type roomStatController struct {
 }
 
 func (c *roomStatController) GetRoomType(w http.ResponseWriter, r *http.Request) {
-	respondWithErrorLog(c.log, w, http.StatusNotImplemented, notImplemtedMessage)
+	utils.RespondWithErrorLog(c.log, w, http.StatusNotImplemented, utils.NotImplemtedMessage)
 
 }
 func (c *roomStatController) GetAvailableSpace(w http.ResponseWriter, r *http.Request) {
-	respondWithErrorLog(c.log, w, http.StatusNotImplemented, notImplemtedMessage)
+	utils.RespondWithErrorLog(c.log, w, http.StatusNotImplemented, utils.NotImplemtedMessage)
 
 }
 func (c *roomStatController) GetAllResidents(w http.ResponseWriter, r *http.Request) {
-	respondWithErrorLog(c.log, w, http.StatusNotImplemented, notImplemtedMessage)
+	utils.RespondWithErrorLog(c.log, w, http.StatusNotImplemented, utils.NotImplemtedMessage)
 
 }

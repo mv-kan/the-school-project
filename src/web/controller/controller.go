@@ -5,6 +5,7 @@ import (
 
 	"github.com/mv-kan/the-school-project/logger"
 	"github.com/mv-kan/the-school-project/service"
+	"github.com/mv-kan/the-school-project/web/utils"
 )
 
 func New[T any](log logger.Logger, serv service.IService[T]) IController {
@@ -25,21 +26,21 @@ type controller[T any] struct {
 }
 
 func (c *controller[T]) Get(w http.ResponseWriter, r *http.Request) {
-	respondWithErrorLog(c.log, w, http.StatusNotImplemented, notImplemtedMessage)
+	utils.RespondWithErrorLog(c.log, w, http.StatusNotImplemented, utils.NotImplemtedMessage)
 }
 
 func (c *controller[T]) GetAll(w http.ResponseWriter, r *http.Request) {
-	respondWithErrorLog(c.log, w, http.StatusNotImplemented, notImplemtedMessage)
+	utils.RespondWithErrorLog(c.log, w, http.StatusNotImplemented, utils.NotImplemtedMessage)
 }
 
 func (c *controller[T]) Delete(w http.ResponseWriter, r *http.Request) {
-	respondWithErrorLog(c.log, w, http.StatusNotImplemented, notImplemtedMessage)
+	utils.RespondWithErrorLog(c.log, w, http.StatusNotImplemented, utils.NotImplemtedMessage)
 }
 
 func (c *controller[T]) Create(w http.ResponseWriter, r *http.Request) {
-
+	utils.RespondWithErrorLog(c.log, w, http.StatusNotImplemented, utils.NotImplemtedMessage)
 }
 
 func (c *controller[T]) Update(w http.ResponseWriter, r *http.Request) {
-
+	utils.RespondWithErrorLog(c.log, w, http.StatusNotImplemented, utils.NotImplemtedMessage)
 }

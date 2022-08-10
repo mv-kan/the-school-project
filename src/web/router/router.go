@@ -8,6 +8,7 @@ import (
 	"github.com/mv-kan/the-school-project/logger"
 	"github.com/mv-kan/the-school-project/service"
 	"github.com/mv-kan/the-school-project/web/controller"
+	"github.com/mv-kan/the-school-project/web/utils"
 )
 
 func getGenericRoutes(
@@ -109,5 +110,9 @@ func New(
 			Name(r.Name).
 			Handler(r.HandlerFunc)
 	}
+
+	router.NotFoundHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		utils.RespondWithError(w, http.StatusNotFound, "Endpoint is not found!")
+	})
 	return router
 }
