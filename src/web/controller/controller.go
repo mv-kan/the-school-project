@@ -3,11 +3,12 @@ package controller
 import (
 	"net/http"
 
+	"github.com/mv-kan/the-school-project/logger"
 	"github.com/mv-kan/the-school-project/service"
 )
 
-func New[T any](serv service.IService[T]) IController {
-	return &controller[T]{service: serv}
+func New[T any](log logger.Logger, serv service.IService[T]) IController {
+	return &controller[T]{log: log, service: serv}
 }
 
 type IController interface {
@@ -20,18 +21,19 @@ type IController interface {
 
 type controller[T any] struct {
 	service service.IService[T]
+	log     logger.Logger
 }
 
 func (c *controller[T]) Get(w http.ResponseWriter, r *http.Request) {
-
+	respondWithErrorLog(c.log, w, http.StatusNotImplemented, notImplemtedMessage)
 }
 
 func (c *controller[T]) GetAll(w http.ResponseWriter, r *http.Request) {
-
+	respondWithErrorLog(c.log, w, http.StatusNotImplemented, notImplemtedMessage)
 }
 
 func (c *controller[T]) Delete(w http.ResponseWriter, r *http.Request) {
-
+	respondWithErrorLog(c.log, w, http.StatusNotImplemented, notImplemtedMessage)
 }
 
 func (c *controller[T]) Create(w http.ResponseWriter, r *http.Request) {

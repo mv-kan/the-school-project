@@ -3,11 +3,12 @@ package controller
 import (
 	"net/http"
 
+	"github.com/mv-kan/the-school-project/logger"
 	"github.com/mv-kan/the-school-project/service"
 )
 
-func NewFinancial(financialServ service.IFinancialService) IFinancialController {
-	return &financialController{financialServ: financialServ}
+func NewFinancial(log logger.Logger, financialServ service.IFinancialService) IFinancialController {
+	return &financialController{log: log, financialServ: financialServ}
 }
 
 type IFinancialController interface {
@@ -17,6 +18,7 @@ type IFinancialController interface {
 
 type financialController struct {
 	financialServ service.IFinancialService
+	log           logger.Logger
 }
 
 func (c *financialController) GetAllLodgingDebtors(w http.ResponseWriter, r *http.Request) {
