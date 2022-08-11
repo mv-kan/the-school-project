@@ -2,6 +2,7 @@ package utils
 
 import (
 	"encoding/json"
+	"errors"
 	"io"
 	"net/http"
 
@@ -53,12 +54,15 @@ func RespondWithJSON(w http.ResponseWriter, code int, payload interface{}) error
 }
 
 func ParseJSONFromBody[T entity.Base](body io.ReadCloser) (T, error) {
-	validate := validator.New()
 	var instance T
-	err := json.NewDecoder(body).Decode(instance)
+	if body == nil {
+		return instance, errors.New("body is empty")
+	}
+	err := json.NewDecoder(body).Decode(&instance)
 	if err != nil {
 		return instance, err
 	}
+	validate := validator.New()
 	err = validate.Struct(instance)
 	if err != nil {
 		return instance, err

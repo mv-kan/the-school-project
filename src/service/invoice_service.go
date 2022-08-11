@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"time"
 
 	"github.com/mv-kan/the-school-project/entity"
 	"github.com/mv-kan/the-school-project/repo"
@@ -79,6 +80,7 @@ func (s invoiceService) Delete(id int) error {
 // TODO set payment date and write test for this functionality
 func (s invoiceService) Create(invoice entity.Invoice) (entity.Invoice, error) {
 	tx := s.db.Begin()
+	invoice.DateOfPayment = time.Now()
 	invoice, err := s.invoiceRepo.WithTx(tx).Create(invoice)
 	if err != nil {
 		tx.Rollback()

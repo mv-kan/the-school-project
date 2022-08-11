@@ -8,7 +8,7 @@ import (
 
 type Invoice struct {
 	ID              int             `gorm:"primaryKey"`
-	DateOfPayment   time.Time       `gorm:"notNull" validate:"required"`
+	DateOfPayment   time.Time       `gorm:"notNull"`
 	PaymentStart    time.Time       `gorm:"notNull" validate:"required"`
 	PaymentDue      time.Time       `gorm:"notNull" validate:"required"`
 	PupilID         int             `gorm:"notNull" validate:"required"`

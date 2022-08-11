@@ -46,3 +46,4 @@ var TestRoomTypeID = 2
 var TestTypeOfServiceID = 1
 var TestInvoiceID = 2
 var TestInvoiceAmountOfMoney = decimal.NewFromFloat(380)
+var TestTypeOfServiceIDsInDB = []int{1, 2}

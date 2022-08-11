@@ -40,6 +40,7 @@ func (c *controller[T]) Get(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(params["id"])
 	if err != nil {
 		utils.RespondWithErrorLog(c.log, w, http.StatusBadRequest, err.Error())
+		return
 	}
 	entity, err := c.service.Find(id)
 	if errors.Is(err, repo.ErrRecordNotFound) {
@@ -78,6 +79,7 @@ func (c *controller[T]) Delete(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(params["id"])
 	if err != nil {
 		utils.RespondWithErrorLog(c.log, w, http.StatusBadRequest, err.Error())
+		return
 	}
 	err = c.service.Delete(id)
 	if errors.Is(err, repo.ErrRecordNotFound) {
@@ -92,17 +94,51 @@ func (c *controller[T]) Delete(w http.ResponseWriter, r *http.Request) {
 
 // @Route: method POST /entities
 // @Failure: 404 not found
-// @Failure: 500
-// @Success: http.StatusOK and the entity
+// @Failure: 400 bad request
+// @Failure: 500 internal server error
+// @Success: 201 and the entity
 func (c *controller[T]) Create(w http.ResponseWriter, r *http.Request) {
 	// get the entity from the request body
-	utils.RespondWithErrorLog(c.log, w, http.StatusNotImplemented, utils.NotImplemtedMessage)
+	entity, err := utils.ParseJSONFromBody[T](r.Body)
+	if err != nil {
+		utils.RespondWithErrorLog(c.log, w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	// create the entity
+	entityWithID, err := c.service.Create(entity)
+	if err != nil {
+		utils.RespondWithErrorLog(c.log, w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	utils.RespondWithJSON(w, http.StatusCreated, entityWithID)
 }
 
-// @Route: method GET /entities
+// @Route: method PUT /entities/{ID}
 // @Failure: 404 not found
-// @Failure: 500
+// @Failure: 400 bad request
+// @Failure: 500 internal server error
 // @Success: http.StatusOK and the entity
 func (c *controller[T]) Update(w http.ResponseWriter, r *http.Request) {
-	utils.RespondWithErrorLog(c.log, w, http.StatusNotImplemented, utils.NotImplemtedMessage)
+	params := mux.Vars(r)
+	id, err := strconv.Atoi(params["id"])
+	if err != nil {
+		utils.RespondWithErrorLog(c.log, w, http.StatusBadRequest, err.Error())
+		return
+	}
+	// get the entity from the request body
+	entity, err := utils.ParseJSONFromBody[T](r.Body)
+	if err != nil {
+		utils.RespondWithErrorLog(c.log, w, http.StatusBadRequest, err.Error())
+		return
+	}
+	// set entity id to the id from the url
+	entity = entity.SetID(id).(T)
+	// create the entity
+	err = c.service.Update(entity)
+	if err != nil {
+		utils.RespondWithErrorLog(c.log, w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	utils.RespondWithJSON(w, http.StatusOK, entity)
 }
