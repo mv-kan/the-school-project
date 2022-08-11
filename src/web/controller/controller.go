@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"encoding/json"
 	"errors"
 	"net/http"
 	"strconv"
@@ -97,8 +96,7 @@ func (c *controller[T]) Delete(w http.ResponseWriter, r *http.Request) {
 // @Success: http.StatusOK and the entity
 func (c *controller[T]) Create(w http.ResponseWriter, r *http.Request) {
 	// get the entity from the request body
-	entity := &T{}
-	err := json.NewDecoder(r.Body, entity)
+	utils.RespondWithErrorLog(c.log, w, http.StatusNotImplemented, utils.NotImplemtedMessage)
 }
 
 // @Route: method GET /entities

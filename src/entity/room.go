@@ -2,8 +2,8 @@ package entity
 
 type Room struct {
 	ID         int     `gorm:"primaryKey"`
-	RoomNumber string  `gorm:"notNull"`
-	RoomTypeID int     `gorm:"notNull"`
+	RoomNumber string  `gorm:"notNull" validate:"required"`
+	RoomTypeID int     `gorm:"notNull" validate:"required"`
 	Pupils     []Pupil `gorm:"foreignKey:RoomID"`
 }
 

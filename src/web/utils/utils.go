@@ -5,6 +5,8 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/go-playground/validator/v10"
+	"github.com/mv-kan/the-school-project/entity"
 	"github.com/mv-kan/the-school-project/logger"
 )
 
@@ -50,6 +52,16 @@ func RespondWithJSON(w http.ResponseWriter, code int, payload interface{}) error
 	return nil
 }
 
-func ParseJSONFromBody(body io.ReadCloser) {
-
+func ParseJSONFromBody[T entity.Base](body io.ReadCloser) (T, error) {
+	validate := validator.New()
+	var instance T
+	err := json.NewDecoder(body).Decode(instance)
+	if err != nil {
+		return instance, err
+	}
+	err = validate.Struct(instance)
+	if err != nil {
+		return instance, err
+	}
+	return instance, nil
 }

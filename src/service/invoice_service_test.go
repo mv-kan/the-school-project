@@ -10,6 +10,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// TODO create tests with invoice note in mind
 func TestInvoiceService_Create(t *testing.T) {
 	var amount = decimal.NewFromFloat(100)
 	var invoice = entity.Invoice{}

@@ -76,6 +76,7 @@ func (s invoiceService) Delete(id int) error {
 	return tx.Commit().Error
 }
 
+// TODO set payment date and write test for this functionality
 func (s invoiceService) Create(invoice entity.Invoice) (entity.Invoice, error) {
 	tx := s.db.Begin()
 	invoice, err := s.invoiceRepo.WithTx(tx).Create(invoice)

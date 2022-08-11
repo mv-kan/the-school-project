@@ -2,7 +2,7 @@ package entity
 
 type Dormitory struct {
 	ID          int          `gorm:"primaryKey"`
-	Name        string       `gorm:"notNull"`
+	Name        string       `gorm:"notNull" validate:"required"`
 	RoomTypes   []RoomType   `gorm:"foreignKey:DormitoryID"`
 	Supervisors []Supervisor `gorm:"foreignKey:DormitoryID"`
 }

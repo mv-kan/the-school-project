@@ -2,11 +2,11 @@ package entity
 
 type Supervisor struct {
 	ID          int     `gorm:"primaryKey"`
-	Name        string  `gorm:"notNull"`
-	Surname     string  `gorm:"notNull"`
-	Email       string  `gorm:"notNull"`
-	Phonenumber string  `gorm:"notNull"`
-	DormitoryID int     `gorm:"notNull"`
+	Name        string  `gorm:"notNull" validate:"required"`
+	Surname     string  `gorm:"notNull" validate:"required"`
+	Email       string  `gorm:"notNull" validate:"required,email"`
+	Phonenumber string  `gorm:"notNull" validate:"required,numeric"`
+	DormitoryID int     `gorm:"notNull" validate:"required"`
 	Pupils      []Pupil `gorm:"foreignKey:SupervisorID"`
 }
 
