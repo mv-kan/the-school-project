@@ -16,3 +16,10 @@ type Invoice struct {
 	AmountOfMoney   decimal.Decimal `gorm:"type:numeric"`
 	Note            *InvoiceNote    `gorm:"foreignKey:ID;references:id"`
 }
+
+func (i *Invoice) GetID() int {
+	return i.ID
+}
+func (i *Invoice) SetID(id int) {
+	i.ID = id
+}

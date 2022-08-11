@@ -13,3 +13,11 @@ type Pupil struct {
 	RoomID        sql.NullInt32
 	Invoices      []Invoice `gorm:"foreignKey:PupilID"`
 }
+
+func (p *Pupil) GetID() int {
+	return p.ID
+}
+
+func (p *Pupil) SetID(id int) {
+	p.ID = id
+}

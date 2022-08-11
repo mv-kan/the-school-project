@@ -2,32 +2,24 @@ package service
 
 import (
 	"context"
-	"fmt"
 	"os"
-	"strings"
 	"testing"
 
 	"github.com/joho/godotenv"
+	"github.com/mv-kan/the-school-project/config"
 	"github.com/mv-kan/the-school-project/entity"
 	"github.com/mv-kan/the-school-project/repo"
 	testingdb "github.com/mv-kan/the-school-project/testing-db"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/testcontainers/testcontainers-go"
-	"github.com/testcontainers/testcontainers-go/wait"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
+var connStr string
+
 func connectToDB() *gorm.DB {
-	var (
-		DB_USER     = os.Getenv("TEST_DB_USER")
-		DB_PASSWORD = os.Getenv("TEST_DB_PASSWORD")
-		DB_HOST     = os.Getenv("TEST_DB_HOST")
-		DB_PORT     = os.Getenv("TEST_DB_PORT")
-		DB_NAME     = os.Getenv("TEST_DB_NAME")
-	)
-	dsn := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME)
+	dsn := connStr
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic(err)
@@ -42,34 +34,13 @@ func TestMain(m *testing.M) {
 		DB_PASSWORD = os.Getenv("TEST_DB_PASSWORD")
 		DB_NAME     = os.Getenv("TEST_DB_NAME")
 	)
-	// Work out the path to the 'scripts' directory and set mount strings
-	packageName := "service"
-	workingDir, _ := os.Getwd()
-	rootDir := strings.Replace(workingDir, packageName, "", 1)
-	mountFrom := fmt.Sprintf("%s/testing-db/init.sql", rootDir)
-	mountTo := "/docker-entrypoint-initdb.d/init.sql"
-
-	// Create the Postgres TestContainer
-	ctx := context.Background()
-	req := testcontainers.ContainerRequest{
-		Image:        "postgres:14.4-alpine",
-		ExposedPorts: []string{"5432/tcp"},
-		Mounts: testcontainers.ContainerMounts{
-			{
-				Source: testcontainers.GenericBindMountSource{HostPath: mountFrom},
-				Target: testcontainers.ContainerMountTarget(mountTo)}},
-		Env: map[string]string{
-			"POSTGRES_USER":     DB_USER,
-			"POSTGRES_PASSWORD": DB_PASSWORD,
-			"POSTGRES_DB":       DB_NAME,
-		},
-		WaitingFor: wait.ForLog("database system is ready to accept connections"),
+	pconf := config.PostgresConfig{
+		User:     DB_USER,
+		Password: DB_PASSWORD,
+		DBName:   DB_NAME,
 	}
-
-	postgresC, err := testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{
-		ContainerRequest: req,
-		Started:          true,
-	})
+	ctx := context.Background()
+	postgresC, err := testingdb.RunTestingDB(pconf)
 	if err != nil {
 		// Panic and fail since there isn't much we can do if the container doesn't start
 		panic(err)
@@ -78,8 +49,10 @@ func TestMain(m *testing.M) {
 	defer postgresC.Terminate(ctx)
 
 	// Get the port mapped to 5432 and set as ENV
-	p, _ := postgresC.MappedPort(ctx, "5432")
-	os.Setenv("TEST_DB_PORT", p.Port())
+	connStr, err = testingdb.GetConnStringFromContainer(pconf, postgresC)
+	if err != nil {
+		panic(err)
+	}
 
 	exitVal := m.Run()
 	os.Exit(exitVal)

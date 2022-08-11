@@ -6,3 +6,7 @@ type SchoolClass struct {
 	ClassYear int     `gorm:"notNull"`
 	Pupils    []Pupil `gorm:"foreignKey:SchoolClassID"`
 }
+
+func (sc *SchoolClass) GetID() int {
+	return sc.ID
+}

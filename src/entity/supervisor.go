@@ -9,3 +9,7 @@ type Supervisor struct {
 	DormitoryID int     `gorm:"notNull"`
 	Pupils      []Pupil `gorm:"foreignKey:SupervisorID"`
 }
+
+func (s *Supervisor) GetID() int {
+	return s.ID
+}

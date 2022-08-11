@@ -40,9 +40,12 @@ type service[T any] struct {
 	r repo.IRepository[T]
 }
 
+// err not found is in repo package
 func (s service[T]) FindAll() ([]T, error) {
 	return s.r.FindAll()
 }
+
+// err not found is in repo package
 func (s service[T]) Find(id int) (T, error) {
 	return s.r.Find(id)
 }

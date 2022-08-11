@@ -2,6 +2,7 @@ package utils
 
 import (
 	"encoding/json"
+	"io"
 	"net/http"
 
 	"github.com/mv-kan/the-school-project/logger"
@@ -47,4 +48,8 @@ func RespondWithJSON(w http.ResponseWriter, code int, payload interface{}) error
 	w.WriteHeader(code)
 	w.Write(response)
 	return nil
+}
+
+func ParseJSONFromBody(body io.ReadCloser) {
+
 }

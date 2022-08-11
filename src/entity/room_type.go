@@ -10,3 +10,11 @@ type RoomType struct {
 	MaxOfResidents int             `gorm:"notNull"`
 	Rooms          []Room          `gorm:"foreignKey:RoomTypeID"`
 }
+
+func (rt *RoomType) GetID() int {
+	return rt.ID
+}
+
+func (rt *RoomType) SetID(id int) {
+	rt.ID = id
+}
