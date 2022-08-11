@@ -7,10 +7,11 @@ type Dormitory struct {
 	Supervisors []Supervisor `gorm:"foreignKey:DormitoryID"`
 }
 
-func (d *Dormitory) GetID() int {
+func (d Dormitory) GetID() int {
 	return d.ID
 }
 
-func (d *Dormitory) SetID(id int) {
+func (d Dormitory) SetID(id int) Base {
 	d.ID = id
+	return d
 }

@@ -7,13 +7,14 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
+	"github.com/mv-kan/the-school-project/entity"
 	"github.com/mv-kan/the-school-project/logger"
 	"github.com/mv-kan/the-school-project/repo"
 	"github.com/mv-kan/the-school-project/service"
 	"github.com/mv-kan/the-school-project/web/utils"
 )
 
-func New[T any](log logger.Logger, serv service.IService[T]) IController {
+func New[T entity.Base](log logger.Logger, serv service.IService[T]) IController {
 	return &controller[T]{log: log, service: serv}
 }
 
@@ -25,7 +26,7 @@ type IController interface {
 	Update(w http.ResponseWriter, r *http.Request)
 }
 
-type controller[T any] struct {
+type controller[T entity.Base] struct {
 	service service.IService[T]
 	log     logger.Logger
 }

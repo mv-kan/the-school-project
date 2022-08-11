@@ -17,9 +17,11 @@ type Invoice struct {
 	Note            *InvoiceNote    `gorm:"foreignKey:ID;references:id"`
 }
 
-func (i *Invoice) GetID() int {
+func (i Invoice) GetID() int {
 	return i.ID
 }
-func (i *Invoice) SetID(id int) {
+
+func (i Invoice) SetID(id int) Base {
 	i.ID = id
+	return i
 }

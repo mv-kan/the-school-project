@@ -6,10 +6,11 @@ type InvoiceNote struct {
 	Note string
 }
 
-func (i *InvoiceNote) GetID() int {
+func (i InvoiceNote) GetID() int {
 	return i.ID
 }
 
-func (i *InvoiceNote) SetID(id int) {
+func (i InvoiceNote) SetID(id int) Base {
 	i.ID = id
+	return i
 }

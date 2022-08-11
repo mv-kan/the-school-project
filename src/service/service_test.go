@@ -84,16 +84,22 @@ func TestService_FindAll(t *testing.T) {
 func TestService_CreateUpdateDelete(t *testing.T) {
 	db := connectToDB()
 	var (
-		dorm entity.Dormitory
-		err  error
+		dorm          entity.Dormitory
+		err           error
+		idToOverwrite int = 1
 	)
 
 	t.Run("Save", func(t *testing.T) {
 		dormRepo := repo.New[entity.Dormitory](db)
 		dormServ := New(dormRepo)
-		dorm, err = dormServ.Create(testingdb.TestDormToCreate)
+		dorm = testingdb.TestDormToCreate
+
+		// this id is not going to be saved in the db because in repo it is autoincrement and this values is overwritten by repo
+		dorm.ID = idToOverwrite
+		dorm, err = dormServ.Create(dorm)
 		require.Nil(t, err)
 		assert.Equal(t, testingdb.TestDormToCreate.Name, dorm.Name)
+		assert.NotEqual(t, idToOverwrite, dorm.ID)
 	})
 	t.Run("Update", func(t *testing.T) {
 		updatedName := "BartekUpdated"

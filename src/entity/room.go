@@ -7,6 +7,11 @@ type Room struct {
 	Pupils     []Pupil `gorm:"foreignKey:RoomID"`
 }
 
-func (r *Room) GetID() int {
+func (r Room) GetID() int {
 	return r.ID
+}
+
+func (r Room) SetID(id int) Base {
+	r.ID = id
+	return r
 }

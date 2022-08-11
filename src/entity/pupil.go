@@ -14,10 +14,11 @@ type Pupil struct {
 	Invoices      []Invoice `gorm:"foreignKey:PupilID"`
 }
 
-func (p *Pupil) GetID() int {
+func (p Pupil) GetID() int {
 	return p.ID
 }
 
-func (p *Pupil) SetID(id int) {
+func (p Pupil) SetID(id int) Base {
 	p.ID = id
+	return p
 }

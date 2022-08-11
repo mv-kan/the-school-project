@@ -3,16 +3,17 @@ package repo
 import (
 	"errors"
 
+	"github.com/mv-kan/the-school-project/entity"
 	"gorm.io/gorm"
 )
 
 var ErrRecordNotFound = errors.New("Record not found")
 
-func New[T any](db *gorm.DB) IRepository[T] {
+func New[T entity.Base](db *gorm.DB) IRepository[T] {
 	return &Repository[T]{db: db}
 }
 
-type IRepository[T any] interface {
+type IRepository[T entity.Base] interface {
 	FindAll() ([]T, error)
 	Find(id int) (T, error)
 	Delete(id int) error
@@ -21,7 +22,7 @@ type IRepository[T any] interface {
 	WithTx(tx *gorm.DB) IRepository[T]
 }
 
-type Repository[T any] struct {
+type Repository[T entity.Base] struct {
 	db *gorm.DB
 }
 
@@ -56,6 +57,7 @@ func (repo Repository[T]) Delete(id int) error {
 }
 
 func (repo Repository[T]) Create(entity T) (T, error) {
+	entity = entity.SetID(0).(T)
 	err := repo.db.Create(&entity).Error
 	return entity, err
 }

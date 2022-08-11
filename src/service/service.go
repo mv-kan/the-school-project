@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/mv-kan/the-school-project/entity"
 	"github.com/mv-kan/the-school-project/repo"
 )
 
@@ -14,7 +15,7 @@ const (
 	CHARGE_FOR_EDUCATION       = 500
 )
 
-// func New[T any](db *gorm.DB) IService[T] {
+// func New[T entity.Base](db *gorm.DB) IService[T] {
 // 	var instance T
 // 	switch instance.(type) {
 // 	case entity.Invoice:
@@ -24,11 +25,11 @@ const (
 // 	}
 // }
 
-func New[T any](r repo.IRepository[T]) IService[T] {
+func New[T entity.Base](r repo.IRepository[T]) IService[T] {
 	return &service[T]{r: r}
 }
 
-type IService[T any] interface {
+type IService[T entity.Base] interface {
 	FindAll() ([]T, error)
 	Find(id int) (T, error)
 	Delete(id int) error
@@ -36,7 +37,7 @@ type IService[T any] interface {
 	Update(T) error
 }
 
-type service[T any] struct {
+type service[T entity.Base] struct {
 	r repo.IRepository[T]
 }
 

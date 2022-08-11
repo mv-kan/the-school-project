@@ -11,10 +11,11 @@ type RoomType struct {
 	Rooms          []Room          `gorm:"foreignKey:RoomTypeID"`
 }
 
-func (rt *RoomType) GetID() int {
-	return rt.ID
+func (r RoomType) GetID() int {
+	return r.ID
 }
 
-func (rt *RoomType) SetID(id int) {
-	rt.ID = id
+func (r RoomType) SetID(id int) Base {
+	r.ID = id
+	return r
 }

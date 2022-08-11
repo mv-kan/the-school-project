@@ -7,6 +7,11 @@ type SchoolClass struct {
 	Pupils    []Pupil `gorm:"foreignKey:SchoolClassID"`
 }
 
-func (sc *SchoolClass) GetID() int {
-	return sc.ID
+func (s SchoolClass) GetID() int {
+	return s.ID
+}
+
+func (s SchoolClass) SetID(id int) Base {
+	s.ID = id
+	return s
 }

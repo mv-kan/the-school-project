@@ -10,6 +10,11 @@ type Supervisor struct {
 	Pupils      []Pupil `gorm:"foreignKey:SupervisorID"`
 }
 
-func (s *Supervisor) GetID() int {
+func (s Supervisor) GetID() int {
 	return s.ID
+}
+
+func (s Supervisor) SetID(id int) Base {
+	s.ID = id
+	return s
 }
