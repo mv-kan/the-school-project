@@ -1,7 +1,6 @@
 package service
 
 import (
-	"context"
 	"os"
 	"testing"
 
@@ -39,20 +38,9 @@ func TestMain(m *testing.M) {
 		Password: DB_PASSWORD,
 		DBName:   DB_NAME,
 	}
-	ctx := context.Background()
-	postgresC, err := testingdb.RunTestingDB(pconf)
-	if err != nil {
-		// Panic and fail since there isn't much we can do if the container doesn't start
-		panic(err)
-	}
 
-	defer postgresC.Terminate(ctx)
-
-	// Get the port mapped to 5432 and set as ENV
-	connStr, err = testingdb.GetConnStringFromContainer(pconf, postgresC)
-	if err != nil {
-		panic(err)
-	}
+	// Set connection string
+	connStr = testingdb.MustGetConnString(pconf)
 
 	exitVal := m.Run()
 	os.Exit(exitVal)

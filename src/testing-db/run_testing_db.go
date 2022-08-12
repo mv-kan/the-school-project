@@ -20,6 +20,18 @@ func mustGetPathToInitSQL() string {
 	return workingDir[:index] + strings.Join([]string{"src", "testing-db", "init.sql"}, string(os.PathSeparator))
 }
 
+func MustGetConnString(pconf config.PostgresConfig) string {
+	container, err := RunTestingDB(pconf)
+	if err != nil {
+		panic(err)
+	}
+	connString, err := GetConnStringFromContainer(pconf, container)
+	if err != nil {
+		panic(err)
+	}
+	return connString
+}
+
 func GetConnStringFromContainer(pconf config.PostgresConfig, container testcontainers.Container) (string, error) {
 	ctx := context.Background()
 
@@ -53,7 +65,7 @@ func RunTestingDB(pconf config.PostgresConfig) (testcontainers.Container, error)
 	// Create the Postgres TestContainer
 	ctx := context.Background()
 	req := testcontainers.ContainerRequest{
-		Image:        "postgres:14.4",
+		Image:        "postgres:14.4-bullseye",
 		ExposedPorts: []string{"5432/tcp"},
 		Mounts: testcontainers.ContainerMounts{
 			{
@@ -64,7 +76,8 @@ func RunTestingDB(pconf config.PostgresConfig) (testcontainers.Container, error)
 			"POSTGRES_PASSWORD": DB_PASSWORD,
 			"POSTGRES_DB":       DB_NAME,
 		},
-		WaitingFor: wait.ForLog("database system is ready to accept connections"),
+		WaitingFor: wait.ForListeningPort("5432/tcp"),
+		AutoRemove: true,
 	}
 
 	postgresC, err := testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{

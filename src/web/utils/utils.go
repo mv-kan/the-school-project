@@ -69,3 +69,15 @@ func ParseJSONFromBody[T entity.Base](body io.ReadCloser) (T, error) {
 	}
 	return instance, nil
 }
+
+func ParseJSONNoValidator[T any](body io.ReadCloser) (T, error) {
+	var instance T
+	if body == nil {
+		return instance, errors.New("body is empty")
+	}
+	err := json.NewDecoder(body).Decode(&instance)
+	if err != nil {
+		return instance, err
+	}
+	return instance, nil
+}
