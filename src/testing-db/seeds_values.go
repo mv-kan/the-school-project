@@ -29,7 +29,7 @@ var TestInvoiceInDB = entity.Invoice{
 }
 
 var TestDormInDB = entity.Dormitory{ID: 1, Name: "Laura"}
-
+var TestSchoolClassID = 1
 var TestDormToCreate = entity.Dormitory{Name: "Bartek"}
 var TestDorms = []entity.Dormitory{TestDormInDB, {ID: 2, Name: "Laura"}}
 var TestDebptorID int = 3
