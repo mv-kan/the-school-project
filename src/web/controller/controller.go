@@ -89,7 +89,7 @@ func (c *controller[T]) Delete(w http.ResponseWriter, r *http.Request) {
 		utils.RespondWithErrorLog(c.log, w, http.StatusInternalServerError, err.Error())
 		return
 	}
-	utils.RespondWithJSON(w, http.StatusOK, nil)
+	utils.RespondWithCode(w, http.StatusOK)
 }
 
 // @Route: method POST /entities
@@ -140,5 +140,5 @@ func (c *controller[T]) Update(w http.ResponseWriter, r *http.Request) {
 		utils.RespondWithErrorLog(c.log, w, http.StatusInternalServerError, err.Error())
 		return
 	}
-	utils.RespondWithJSON(w, http.StatusOK, nil)
+	utils.RespondWithCode(w, http.StatusOK)
 }
