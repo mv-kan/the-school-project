@@ -74,10 +74,11 @@ func getRoutes(
 	}
 
 	// room stat routes
-	roomStatC := controller.NewRoomStat(log, roomStatServ)
+	roomC := controller.NewRoom(log, roomServ, roomStatServ)
 	roomStatRoutes := []route{
-		{Name: "get-all-residents-of-room", Method: http.MethodGet, Pattern: "/rooms/{id:[0-9]+}/all-residents", HandlerFunc: roomStatC.GetAllResidents},
-		{Name: "get-available-space-of-room", Method: http.MethodGet, Pattern: "/rooms/{id:[0-9]+}/available-space", HandlerFunc: roomStatC.GetAvailableSpace},
+		{Name: "get-type-of-room", Method: http.MethodGet, Pattern: "/rooms/{id:[0-9]+}/type", HandlerFunc: roomC.GetRoomType},
+		{Name: "get-all-residents-of-room", Method: http.MethodGet, Pattern: "/rooms/{id:[0-9]+}/all-residents", HandlerFunc: roomC.GetAllResidents},
+		{Name: "get-available-space-of-room", Method: http.MethodGet, Pattern: "/rooms/{id:[0-9]+}/available-space", HandlerFunc: roomC.GetAvailableSpace},
 	}
 
 	// merge all routes into one slice

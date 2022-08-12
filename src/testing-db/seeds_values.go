@@ -11,7 +11,7 @@ import (
 // this looks like a pile of garbage, I will eventually refactor it to be neater (*maybe)
 // it is very important to keep this test values in sync with seeded values in "testing-db" folder
 var TestPupilInDB = entity.Pupil{
-	ID:            1,
+	ID:            2,
 	Name:          "michael",
 	Surname:       "lan",
 	SchoolClassID: 3,
