@@ -7,7 +7,7 @@ type Supervisor struct {
 	Email       string  `gorm:"notNull" validate:"required,email"`
 	Phonenumber string  `gorm:"notNull" validate:"required,numeric"`
 	DormitoryID int     `gorm:"notNull" validate:"required"`
-	Pupils      []Pupil `gorm:"foreignKey:SupervisorID"`
+	Pupils      []Pupil `gorm:"foreignKey:SupervisorID" json:"-"`
 }
 
 func (s Supervisor) GetID() int {

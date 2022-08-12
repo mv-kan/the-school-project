@@ -8,7 +8,7 @@ type RoomType struct {
 	DormitoryID    int             `gorm:"notNull" validate:"required"`
 	Name           string          `gorm:"notNull" validate:"required"`
 	MaxOfResidents int             `gorm:"notNull" validate:"required"`
-	Rooms          []Room          `gorm:"foreignKey:RoomTypeID"`
+	Rooms          []Room          `gorm:"foreignKey:RoomTypeID" json:"-"`
 }
 
 func (r RoomType) GetID() int {

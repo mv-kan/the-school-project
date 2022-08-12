@@ -11,7 +11,7 @@ type Pupil struct {
 	SchoolClassID int `gorm:"notNull" validate:"required"`
 	SupervisorID  sql.NullInt32
 	RoomID        sql.NullInt32
-	Invoices      []Invoice `gorm:"foreignKey:PupilID"`
+	Invoices      []Invoice `gorm:"foreignKey:PupilID" json:"-"`
 }
 
 func (p Pupil) GetID() int {

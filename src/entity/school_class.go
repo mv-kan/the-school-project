@@ -4,7 +4,7 @@ type SchoolClass struct {
 	ID        int     `gorm:"primaryKey"`
 	Name      string  `gorm:"notNull" validate:"required"`
 	ClassYear int     `gorm:"notNull" validate:"required"`
-	Pupils    []Pupil `gorm:"foreignKey:SchoolClassID"`
+	Pupils    []Pupil `gorm:"foreignKey:SchoolClassID" json:"-"`
 }
 
 func (s SchoolClass) GetID() int {
