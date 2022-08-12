@@ -65,7 +65,7 @@ func RunTestingDB(pconf config.PostgresConfig) (testcontainers.Container, error)
 	// Create the Postgres TestContainer
 	ctx := context.Background()
 	req := testcontainers.ContainerRequest{
-		Image:        "postgres:14.4-bullseye",
+		Image:        "postgres:14.4-alpine",
 		ExposedPorts: []string{"5432/tcp"},
 		Mounts: testcontainers.ContainerMounts{
 			{
