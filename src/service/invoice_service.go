@@ -43,7 +43,7 @@ func (s invoiceService) FindAll() ([]entity.Invoice, error) {
 		}
 	}
 	// return invoices with invoice notes
-	return s.invoiceRepo.FindAll()
+	return invoices, nil
 }
 
 func (s invoiceService) Find(id int) (entity.Invoice, error) {
@@ -81,18 +81,11 @@ func (s invoiceService) Delete(id int) error {
 func (s invoiceService) Create(invoice entity.Invoice) (entity.Invoice, error) {
 	tx := s.db.Begin()
 	invoice.DateOfPayment = time.Now()
+	// Note: if note is in invoice already gorm db will create automatically note in the table
 	invoice, err := s.invoiceRepo.WithTx(tx).Create(invoice)
 	if err != nil {
 		tx.Rollback()
 		return invoice, err
-	}
-	if invoice.Note != nil {
-		invoice.Note.ID = invoice.ID
-		_, err = s.invoiceNoteRepo.WithTx(tx).Create(*invoice.Note)
-		if err != nil {
-			tx.Rollback()
-			return invoice, err
-		}
 	}
 	return invoice, tx.Commit().Error
 }
@@ -110,6 +103,8 @@ func (s invoiceService) Update(invoice entity.Invoice) error {
 			tx.Rollback()
 			return err
 		}
+	} else {
+		err = s.invoiceNoteRepo.WithTx(tx).Delete(invoice.ID)
 	}
 	return tx.Commit().Error
 }

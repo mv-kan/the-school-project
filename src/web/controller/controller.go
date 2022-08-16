@@ -30,6 +30,7 @@ type controller[T entity.Base] struct {
 	log     logger.Logger
 }
 
+// TODO add support for edge cases like violation of unique key constraint
 // @Route: method GET /entities/{id}
 // @Failure: 404 not found
 // @Failure: 400 bad request
@@ -69,6 +70,7 @@ func (c *controller[T]) GetAll(w http.ResponseWriter, r *http.Request) {
 	utils.RespondWithJSON(w, http.StatusOK, entities)
 }
 
+// TODO support case when foreign key is dependent on this entity
 // @Route: method DELETE /entities/{id}
 // @Failure: 404 not found
 // @Failure: 400 bad request
@@ -118,7 +120,7 @@ func (c *controller[T]) Create(w http.ResponseWriter, r *http.Request) {
 // @Failure: 404 not found
 // @Failure: 400 bad request
 // @Failure: 500 internal server error
-// @Success: http.StatusOK and the entity
+// @Success: http.StatusOK
 func (c *controller[T]) Update(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	id, err := strconv.Atoi(params["id"])
@@ -136,7 +138,10 @@ func (c *controller[T]) Update(w http.ResponseWriter, r *http.Request) {
 	entity = entity.SetID(id).(T)
 	// create the entity
 	err = c.service.Update(entity)
-	if err != nil {
+	if errors.Is(err, repo.ErrRecordNotFound) {
+		utils.RespondWithErrorLog(c.log, w, http.StatusNotFound, err.Error())
+		return
+	} else if err != nil {
 		utils.RespondWithErrorLog(c.log, w, http.StatusInternalServerError, err.Error())
 		return
 	}

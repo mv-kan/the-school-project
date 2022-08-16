@@ -18,6 +18,7 @@ type IRepository[T entity.Base] interface {
 	Find(id int) (T, error)
 	Delete(id int) error
 	Create(T) (T, error)
+	CreateWithID(T) (T, error)
 	Update(T) error
 	WithTx(tx *gorm.DB) IRepository[T]
 }
@@ -49,9 +50,12 @@ func (repo Repository[T]) Find(id int) (T, error) {
 
 func (repo Repository[T]) Delete(id int) error {
 	var entity T
-	err := repo.db.Delete(&entity, id).Error
-	if errors.Is(err, gorm.ErrRecordNotFound) {
+	result := repo.db.Delete(&entity, id)
+	err := result.Error
+	if result.RowsAffected < 1 {
 		return ErrRecordNotFound
+	} else if err != nil {
+		return err
 	}
 	return err
 }
@@ -62,7 +66,18 @@ func (repo Repository[T]) Create(entity T) (T, error) {
 	return entity, err
 }
 
+func (repo Repository[T]) CreateWithID(entity T) (T, error) {
+	err := repo.db.Create(&entity).Error
+	return entity, err
+}
+
 func (repo Repository[T]) Update(entity T) error {
-	err := repo.db.Model(&entity).Updates(entity).Error
+	// check if entity exists
+	_, err := repo.Find(entity.GetID())
+	if err != nil {
+		return err
+	}
+	// and then update
+	err = repo.db.Model(&entity).Updates(entity).Error
 	return err
 }
