@@ -230,7 +230,4 @@ func TestController_Update(t *testing.T) {
 	r.ServeHTTP(rr, req)
 	// check response
 	assert.Equal(t, http.StatusOK, rr.Code)
-	invoiceRes, err = utils.ParseJSONFromBody[entity.Invoice](rr.Result().Body)
-	require.Nil(t, err)
-	assert.Equal(t, updatedMoney.String(), invoiceRes.AmountOfMoney.String())
 }

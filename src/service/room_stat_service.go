@@ -56,7 +56,7 @@ func (s roomStatService) FindAllResidents(room_id int) ([]entity.Pupil, error) {
 	}
 	residents := make([]entity.Pupil, 0)
 	for _, pupil := range pupils {
-		if pupil.RoomID.Valid && pupil.RoomID.Int32 == int32(room_id) {
+		if pupil.RoomID != nil && *pupil.RoomID == room_id {
 			residents = append(residents, pupil)
 		}
 	}

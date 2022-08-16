@@ -57,7 +57,7 @@ func (s finacialService) FindAllLodgingDebtors() ([]entity.Pupil, error) {
 			}
 			return false
 		}
-		if !in(pupil.ID, notDebtors) && pupil.RoomID.Valid {
+		if !in(pupil.ID, notDebtors) && pupil.RoomID != nil {
 			debtors = append(debtors, pupil)
 		}
 	}

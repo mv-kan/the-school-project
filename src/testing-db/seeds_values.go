@@ -1,7 +1,6 @@
 package testingdb
 
 import (
-	"database/sql"
 	"time"
 
 	"github.com/mv-kan/the-school-project/entity"
@@ -15,7 +14,7 @@ var TestPupilInDB = entity.Pupil{
 	Name:          "michael",
 	Surname:       "lan",
 	SchoolClassID: 3,
-	RoomID:        sql.NullInt32{Int32: 2, Valid: true},
+	RoomID:        &TestRoomID,
 }
 var TestInvoiceInDB = entity.Invoice{
 	ID:              1,

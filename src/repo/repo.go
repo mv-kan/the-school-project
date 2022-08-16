@@ -52,10 +52,10 @@ func (repo Repository[T]) Delete(id int) error {
 	var entity T
 	result := repo.db.Delete(&entity, id)
 	err := result.Error
-	if result.RowsAffected < 1 {
-		return ErrRecordNotFound
-	} else if err != nil {
+	if err != nil {
 		return err
+	} else if result.RowsAffected < 1 {
+		return ErrRecordNotFound
 	}
 	return err
 }

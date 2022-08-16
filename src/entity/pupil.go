@@ -1,16 +1,14 @@
 package entity
 
-import "database/sql"
-
 type Pupil struct {
 	ID            int    `gorm:"primaryKey"`
 	Name          string `gorm:"notNull" validate:"required"`
 	Surname       string `gorm:"notNull" validate:"required"`
-	Email         sql.NullString
-	Phonenumber   sql.NullString
+	Email         *string
+	Phonenumber   *string
 	SchoolClassID int `gorm:"notNull" validate:"required"`
-	SupervisorID  sql.NullInt32
-	RoomID        sql.NullInt32
+	SupervisorID  *int
+	RoomID        *int
 	Invoices      []Invoice `gorm:"foreignKey:PupilID" json:"-"`
 }
 
