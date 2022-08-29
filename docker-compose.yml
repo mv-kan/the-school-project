@@ -5,7 +5,7 @@ services:
     image: golang
     build: ./src
     ports:
-      - 1234:8080
+      - 1234:80
     volumes: 
       - ./src:/dockerapp
     depends_on:

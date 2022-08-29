@@ -41,10 +41,12 @@ func main() {
 	// TODO add logger +
 	// TODO add documentation for all internal tools
 	// TODO add documentation for all routes in swagger
-
+	godotenv.Load("./.env")
+	var (
+		LISTENING_PORT = os.Getenv("LISTENING_PORT")
+	)
 	// open db connection
 	db := mustConnectToDB()
-
 	// init all services and the logger
 	var (
 		log               = logger.New()
@@ -60,11 +62,13 @@ func main() {
 		financialServ     = service.NewFinancial(db)
 		roomStatServ      = service.NewRoomStat(db)
 	)
+	log.Debug(fmt.Sprint("connected to db and initilized services", LISTENING_PORT))
+
 	// get router
 	r := router.New(log, dormServ, invoiceServ, pupilServ, roomTypeServ, roomServ, schoolClassServ, supervisorServ, typeOfServiceServ, enrollServ, financialServ, roomStatServ)
 
 	http.Handle("/", r)
-
+	log.Debug(fmt.Sprint("starting server on port ", LISTENING_PORT))
 	// start server
-	http.ListenAndServe(":8080", nil)
+	log.Error(http.ListenAndServe(fmt.Sprint(":", LISTENING_PORT), nil).Error())
 }
