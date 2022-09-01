@@ -12,11 +12,11 @@ jobs:
         with:
           go-version: '1.18.x'
       - name: Install dependencies
-        working-directory: ./src
+        working-directory: ./main-api
         run: go get .
       - name: Build
-        working-directory: ./src
+        working-directory: ./main-api
         run: go build -v ./...
       - name: Test with the Go CLI
-        working-directory: ./src
+        working-directory: ./main-api
         run: go test ./...
